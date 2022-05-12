@@ -92,8 +92,8 @@ for i in tqdm(range(n_iter), desc = 'Simulating...'):
     ap = G * mq * ru(p, q) / (r(p, q)**2)
     aq = G * mp * ru(q, p) / (r(q, p)**2)
     
-    up = up * del_t + (0.5 * ap * del_t ** 2)
-    uq = uq * del_t + (0.5 * aq * del_t ** 2)
+    up = up + (ap * del_t)
+    uq = uq + (aq * del_t)
     
     p += (up * del_t)
     q += (uq * del_t)
