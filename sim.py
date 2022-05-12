@@ -1,9 +1,12 @@
 import os
 import cv2
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from datetime import datetime
+
+mpl.rcParams['figure.max_open_warning'] = 0
 
 def r(p, q):
     '''
