@@ -23,7 +23,7 @@ def r(p, q):
 
     '''
     d = np.sqrt(np.dot(p - q, (p - q).T))
-    return d if d > 20 else 20
+    return d if d > 50 else 50
 
 def ru(p, q):
     
@@ -56,8 +56,8 @@ G = 6.6743 * 10**(-11)
 up = [0, -3]
 uq = [0, 2]
 
-p = np.array([500.0, 400.0])
-q = np.array([700.0, 800.0])
+p = np.array([100.0, 400.0])
+q = np.array([300.0, 500.0])
 
 def mass_circle_p(x, y):
     global mp, p
@@ -90,10 +90,10 @@ t = 2
 for i in tqdm(range(n_iter), desc = 'Simulating...'):    
 
     ap = G * mq * ru(p, q) / (r(p, q)**2)
-    aq = G * mp * ru(q, p) / (r(q, p)**2)
+    aq = G * mp * ru(q, p) / (r(p, q)**2)
     
-    up = up + (ap * del_t)
-    uq = uq + (aq * del_t)
+    up += (ap * del_t)
+    uq += (aq * del_t)
     
     p += (up * del_t)
     q += (uq * del_t)
@@ -111,16 +111,21 @@ for i in tqdm(range(n_iter), desc = 'Simulating...'):
     
     new_space = space + update_space()
     
-    plt.figure(figsize = (26.66667, 15))
+    plt.figure(figsize = (20, 15))
     plt.imshow(new_space, cmap = 'gray')
+    #plt.show()
     plt.savefig(frames_dir + "/img.{0:05d}.png".format(i))
     plt.clf()
-    
-result = cv2.VideoWriter(f'space_simt{i}_{now}.avi', 
+
+  
+vid_dir = f'space_simt{i}_{now}.avi'
+result = cv2.VideoWriter(vid_dir, 
                          cv2.VideoWriter_fourcc(*'MJPG'),
-                         20, (1920, 1080))
+                         20, (1440, 1080))
 
 for file in tqdm(sorted(os.listdir(frames_dir)), desc = "Saving ..."):
     image = cv2.imread(os.path.join(frames_dir, file))
     result.write(image)
 result.release()
+
+print(f'Simulation saved as: {vid_dir}')
