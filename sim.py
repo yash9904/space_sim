@@ -56,8 +56,8 @@ G = 6.6743 * 10**(-11)
 up = [0, -3]
 uq = [0, 2]
 
-p = np.array([100.0, 400.0])
-q = np.array([300.0, 200.0])
+p = np.array([500.0, 400.0])
+q = np.array([700.0, 800.0])
 
 def mass_circle_p(x, y):
     global mp, p
@@ -85,13 +85,15 @@ frames_dir = 'frames_dir_space_sim' + now
 if not os.path.isdir(frames_dir):
     os.mkdir(frames_dir)
 
+t = 2
+
 for i in tqdm(range(n_iter), desc = 'Simulating...'):    
 
     ap = G * mq * ru(p, q) / (r(p, q)**2)
     aq = G * mp * ru(q, p) / (r(q, p)**2)
     
-    up = up + (0.5 * ap * del_t ** 2)
-    uq = uq + (0.5 * aq * del_t ** 2)
+    up = up * del_t + (0.5 * ap * del_t ** 2)
+    uq = uq * del_t + (0.5 * aq * del_t ** 2)
     
     p += (up * del_t)
     q += (uq * del_t)
@@ -104,19 +106,19 @@ for i in tqdm(range(n_iter), desc = 'Simulating...'):
     qx, qy = q.astype(np.uint16)
     
     
-    space[px - 1: px + 1, py - 1: py + 1] = 1
-    space[qx - 1: qx + 1, qy - 1: qy + 1] = 1
+    space[px - t: px + t, py - t: py + t] = 1
+    space[qx - t: qx + t, qy - t: qy + t] = 1
     
     new_space = space + update_space()
     
-    plt.figure(figsize = (16, 9))
+    plt.figure(figsize = (26.66667, 15))
     plt.imshow(new_space, cmap = 'gray')
     plt.savefig(frames_dir + "/img.{0:05d}.png".format(i))
     plt.clf()
     
 result = cv2.VideoWriter(f'space_simt{i}_{now}.avi', 
                          cv2.VideoWriter_fourcc(*'MJPG'),
-                         20, (1152, 648))
+                         20, (1920, 1080))
 
 for file in tqdm(sorted(os.listdir(frames_dir)), desc = "Saving ..."):
     image = cv2.imread(os.path.join(frames_dir, file))
