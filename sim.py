@@ -53,11 +53,11 @@ mq = 2 * pow(10, 14)
 
 G = 6.6743 * 10**(-11)
 
-up = [0, -3]
-uq = [0, 2]
+up = [2, -3]
+uq = [4, 2]
 
-p = np.array([100.0, 400.0])
-q = np.array([300.0, 500.0])
+p = np.array([400.0, 400.0])
+q = np.array([300.0, 800.0])
 
 def mass_circle_p(x, y):
     global mp, p
@@ -86,6 +86,7 @@ if not os.path.isdir(frames_dir):
     os.mkdir(frames_dir)
 
 t = 2
+vid_dir = f'space_sim_t{del_t * n_iter}_{now}.avi'
 
 for i in tqdm(range(n_iter), desc = 'Simulating...'):    
 
@@ -117,15 +118,17 @@ for i in tqdm(range(n_iter), desc = 'Simulating...'):
     plt.savefig(frames_dir + "/img.{0:05d}.png".format(i))
     plt.clf()
 
-  
-vid_dir = f'space_simt{i}_{now}.avi'
+imshape = cv2.imread(os.path.join(frames_dir, os.listdir(frames_dir)[0])).shape
+imshape = (imshape[1], imshape[0])
+
+
 result = cv2.VideoWriter(vid_dir, 
                          cv2.VideoWriter_fourcc(*'MJPG'),
-                         20, (1440, 1080))
+                         20, imshape)
 
 for file in tqdm(sorted(os.listdir(frames_dir)), desc = "Saving ..."):
     image = cv2.imread(os.path.join(frames_dir, file))
     result.write(image)
 result.release()
 
-print(f'Simulation saved as: {vid_dir}')
+print(f'\nSimulation saved as: {vid_dir}')
