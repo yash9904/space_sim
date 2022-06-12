@@ -26,8 +26,6 @@ def r(p, q):
     return d if d > 50 else 50
 
 def ru(p, q):
-    
-    
     '''
 
     Parameters
@@ -78,7 +76,6 @@ def update_space():
 del_t = 1
 n_iter = 1000
 
-
 now = datetime.now().strftime("%d%m%Y_%H%M%S")
 frames_dir = 'frames_dir_space_sim' + now
 
@@ -105,8 +102,7 @@ for i in tqdm(range(n_iter), desc = 'Simulating...'):
 
     px, py = p.astype(np.uint16)
     qx, qy = q.astype(np.uint16)
-    
-    
+        
     space[px - t: px + t, py - t: py + t] = 1
     space[qx - t: qx + t, qy - t: qy + t] = 1
     
@@ -120,7 +116,6 @@ for i in tqdm(range(n_iter), desc = 'Simulating...'):
 
 imshape = cv2.imread(os.path.join(frames_dir, os.listdir(frames_dir)[0])).shape
 imshape = (imshape[1], imshape[0])
-
 
 result = cv2.VideoWriter(vid_dir, 
                          cv2.VideoWriter_fourcc(*'MJPG'),
