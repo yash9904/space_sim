@@ -1,3 +1,4 @@
+#%%
 import os
 import cv2
 import numpy as np
@@ -7,7 +8,7 @@ from tqdm import tqdm
 from datetime import datetime
 
 mpl.rcParams['figure.max_open_warning'] = 0
-
+#%%
 def r(p, q):
     '''
 
@@ -26,6 +27,8 @@ def r(p, q):
     return d if d > 50 else 50
 
 def ru(p, q):
+    
+    
     '''
 
     Parameters
@@ -45,7 +48,7 @@ def ru(p, q):
     d = r(p, q)
     
     return np.array([x / d, y / d])
-
+#%%
 mp = 4 * pow(10, 14)
 mq = 2 * pow(10, 14)
 
@@ -56,7 +59,7 @@ uq = [4, 2]
 
 p = np.array([400.0, 400.0])
 q = np.array([300.0, 800.0])
-
+#%%
 def mass_circle_p(x, y):
     global mp, p
     return ((x - p[0]) ** 2) + ((y - p[1]) ** 2) <= 400
@@ -74,8 +77,9 @@ def update_space():
     return np.fromfunction(mass_circle_p, space.shape) + np.fromfunction(mass_circle_q, space.shape)
     
 del_t = 1
-n_iter = 1000
+n_iter = 2000
 
+#%%
 now = datetime.now().strftime("%d%m%Y_%H%M%S")
 frames_dir = 'frames_dir_space_sim' + now
 
@@ -83,8 +87,9 @@ if not os.path.isdir(frames_dir):
     os.mkdir(frames_dir)
 
 t = 2
-vid_dir = f'space_sim_t{del_t * n_iter}_{now}.avi'
+vid_dir = f'space_sim_t{del_t * n_iter}_{now}.mp4'
 
+#%%
 for i in tqdm(range(n_iter), desc = 'Simulating...'):    
 
     ap = G * mq * ru(p, q) / (r(p, q)**2)
@@ -102,7 +107,8 @@ for i in tqdm(range(n_iter), desc = 'Simulating...'):
 
     px, py = p.astype(np.uint16)
     qx, qy = q.astype(np.uint16)
-        
+    
+    
     space[px - t: px + t, py - t: py + t] = 1
     space[qx - t: qx + t, qy - t: qy + t] = 1
     
@@ -114,11 +120,14 @@ for i in tqdm(range(n_iter), desc = 'Simulating...'):
     plt.savefig(frames_dir + "/img.{0:05d}.png".format(i))
     plt.clf()
 
+#%%
 imshape = cv2.imread(os.path.join(frames_dir, os.listdir(frames_dir)[0])).shape
 imshape = (imshape[1], imshape[0])
 
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+
 result = cv2.VideoWriter(vid_dir, 
-                         cv2.VideoWriter_fourcc(*'MJPG'),
+                         fourcc,
                          20, imshape)
 
 for file in tqdm(sorted(os.listdir(frames_dir)), desc = "Saving ..."):
