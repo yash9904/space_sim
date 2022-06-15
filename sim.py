@@ -77,7 +77,7 @@ def update_space():
     return np.fromfunction(mass_circle_p, space.shape) + np.fromfunction(mass_circle_q, space.shape)
     
 del_t = 1
-n_iter = 2000
+n_iter = 1000
 
 #%%
 now = datetime.now().strftime("%d%m%Y_%H%M%S")
