@@ -115,7 +115,10 @@ for i in tqdm(range(n_iter), desc = 'Simulating...'):
     new_space = space + update_space()
     
     plt.figure(figsize = (20, 15))
+    
     plt.imshow(new_space, cmap = 'gray')
+    plt.xticks([])
+    plt.yticks([])
     #plt.show()
     plt.savefig(frames_dir + "/img.{0:05d}.png".format(i))
     plt.clf()
