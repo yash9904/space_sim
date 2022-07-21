@@ -122,7 +122,6 @@ for i in tqdm(range(n_iter), desc = 'Simulating...'):
     plt.savefig(frames_dir + "/img.{0:05d}.png".format(i))
     plt.close(fig)
 
-#%%
 imshape = cv2.imread(os.path.join(frames_dir, os.listdir(frames_dir)[0])).shape
 imshape = (imshape[1], imshape[0])
 
